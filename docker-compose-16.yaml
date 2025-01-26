@@ -1,0 +1,429 @@
+services:
+  master:
+    image: itzg/minecraft-server
+    ports:
+      - "27425:27425"
+      - "27426:27426"
+    volumes:
+      - /srv/minecraft/multipaper/master:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq    
+    
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh master && /start"]
+    environment:
+      EXTRA_ARGS: "27426 27425"
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-master-2.12.3-all.jar
+      INIT_MEMORY: 8G
+      MAX_MEMORY: 16G
+      EULA: "TRUE"
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.2
+
+  slave-1:
+    image: itzg/minecraft-server
+    ports:
+      - "27427:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s1:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-1 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.3
+
+  slave-2:
+    image: itzg/minecraft-server
+    ports:
+      - "27428:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s2:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-2 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.4
+
+  slave-3:
+    image: itzg/minecraft-server
+    ports:
+      - "27429:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s3:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-3 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.5
+
+  slave-4:
+    image: itzg/minecraft-server
+    ports:
+      - "27430:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s4:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-4 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.6
+
+  slave-5:
+    image: itzg/minecraft-server
+    ports:
+      - "27431:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s5:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq    
+      
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-5 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.7
+
+  slave-6:
+    image: itzg/minecraft-server
+    ports:
+      - "27432:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s6:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-6 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.8
+
+  slave-7:
+    image: itzg/minecraft-server
+    ports:
+      - "27433:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s7:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-7 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.9
+
+  slave-8:
+    image: itzg/minecraft-server
+    ports:
+      - "27434:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s8:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-8 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.10
+
+  slave-9:
+    image: itzg/minecraft-server
+    ports:
+      - "27435:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s9:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-9 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.11
+
+  slave-10:
+    image: itzg/minecraft-server
+    ports:
+      - "27436:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s10:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-10 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.12
+
+  slave-11:
+    image: itzg/minecraft-server
+    ports:
+      - "27437:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s11:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-11 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.13
+
+  slave-12:
+    image: itzg/minecraft-server
+    ports:
+      - "27438:27427"
+    volumes:
+      - /srv/minecraft/multipaper/s12:/data
+      - /srv/minecraft/multipaper/config/init.sh:/init.sh:ro
+      - /srv/minecraft/multipaper/config/yq_linux_amd64:/tmp/yq
+
+    entrypoint: ["/bin/bash", "-c", "/bin/bash /init.sh slave-12 && /start"]
+    environment:
+      TZ: Europe/London
+      TYPE: CUSTOM
+      CUSTOM_SERVER: https://api.multipaper.io/v2/projects/multipaper/versions/1.20.1/builds/56/downloads/multipaper-1.20.1-56.jar
+      JVM_OPTS: |
+        -DmultipaperMasterAddress=172.16.238.2:27426
+        -Dproperties.view-distance=16
+        -Dmultipaper.sync-settings.files.files-to-sync-on-startup=plugins/
+        -Dmultipaper.sync-settings.files.files-to-sync-in-real-time=ops.json,whitelist.json
+      EULA: "TRUE"
+      MEMORY: 16G
+      USE_AIKAR_FLAGS: "true"
+      GUI: "false"
+      DIFFICULTY: normal
+    depends_on:
+      - master
+    working_dir: /data
+    stdin_open: true
+    tty: true
+    networks:
+      mpaper:
+        ipv4_address: 172.16.238.14
+
+networks:
+  mpaper:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.238.0/24
